@@ -87,7 +87,7 @@ app.whenReady().then(async () => {
     function updateContextMenu(tray: Tray) {
         const contextMenu = Menu.buildFromTemplate([
             {
-                label: 'Snow flakes',
+                label: 'Snowflakes',
                 click: () => {
                     mainWindow?.loadFile(path.resolve(__dirname, '../src/page/snow.html'));
                 },
@@ -116,6 +116,12 @@ app.whenReady().then(async () => {
                 click: () => {
                     toggleGpu();
                     updateContextMenu(tray);
+                }
+            },
+            {
+                label: 'Dev tools',
+                click: () => {
+                    createDevToolsWindow();
                 }
             },
             {
@@ -152,6 +158,4 @@ app.whenReady().then(async () => {
     app.on("activate", function () {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
-
-    createDevToolsWindow();
 });
