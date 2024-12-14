@@ -78,24 +78,31 @@ let logo, dimensions;
 
 loadLocalSVG();
 
-// Main loop
-setInterval(() => {
-    if (!logo) return;
+async function main() {
+    const refreshRate = await window.electron.getRefreshRate();
+    console.log(refreshRate)
 
-    x += speed * direction[0];
-    y += speed * direction[1];
+    setInterval(() => {
+        if (!logo) return;
 
-    if (x <= 1) {
-        changeDirection(0, 1);
-    } else if (x + dimensions[0] + 1 >= window.innerWidth) {
-        changeDirection(0, -1);
-    }
+        x += speed * direction[0];
+        y += speed * direction[1];
 
-    if (y <= 1) {
-        changeDirection(1, 1);
-    } else if (y + dimensions[1] + 1 >= window.innerHeight) {
-        changeDirection(1, -1);
-    }
+        if (x <= 1) {
+            changeDirection(0, 1);
+        } else if (x + dimensions[0] + 1 >= window.innerWidth) {
+            changeDirection(0, -1);
+        }
 
-    move(logo, x, y);
-}, 1000 / 60); // 60 FPS
+        if (y <= 1) {
+            changeDirection(1, 1);
+        } else if (y + dimensions[1] + 1 >= window.innerHeight) {
+            changeDirection(1, -1);
+        }
+
+        move(logo, x, y);
+    }, 1000 / refreshRate);
+}
+
+
+main();

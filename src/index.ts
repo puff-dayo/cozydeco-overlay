@@ -4,7 +4,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 import { app, BrowserWindow, screen, Tray, Menu, nativeImage } from "electron";
 import * as path from "path";
 
-import { dialog } from "electron/main";
+import { dialog, ipcMain } from "electron/main";
 
 import { fetchRefreshRate } from "./util/screen_handler";
 import { forceGpuOn, getGpuState, loadGpuState, toggleGpu } from "./util/toggle_gpu";
@@ -44,9 +44,14 @@ async function createWindow() {
     mainWindow.setIgnoreMouseEvents(true)
     mainWindow.loadFile(path.resolve(__dirname, '../src/page/snow.html'));
 
-
-    mainWindow.webContents.setFrameRate(await fetchRefreshRate())
+    const rate = await fetchRefreshRate();
+    mainWindow.webContents.setFrameRate(rate);
 }
+
+ipcMain.handle('get-refresh-rate', async () => {
+    const refreshRate = await fetchRefreshRate();
+    return refreshRate;
+});
 
 loadGpuState();
 if (getGpuState() === 'OFF') {
@@ -82,13 +87,13 @@ app.whenReady().then(async () => {
     function updateContextMenu(tray: Tray) {
         const contextMenu = Menu.buildFromTemplate([
             {
-                label: 'Snow',
+                label: 'Snow flakes',
                 click: () => {
                     mainWindow?.loadFile(path.resolve(__dirname, '../src/page/snow.html'));
                 },
             },
             {
-                label: 'Sakura',
+                label: 'Sakura petals',
                 click: () => {
                     mainWindow?.loadFile(path.resolve(__dirname, '../src/page/sakura/sakura.html'));
                 },
@@ -97,6 +102,12 @@ app.whenReady().then(async () => {
                 label: 'DVD logo',
                 click: () => {
                     mainWindow?.loadFile(path.resolve(__dirname, '../src/page/dvd/index.html'));
+                },
+            },
+            {
+                label: 'Ribbons',
+                click: () => {
+                    mainWindow?.loadFile(path.resolve(__dirname, '../src/page/ribbon/index.html'));
                 },
             },
             { type: 'separator' },

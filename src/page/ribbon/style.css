@@ -1,0 +1,27 @@
+body{
+    background-color: transparent;
+}
+
+html{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+}
+span{
+    display: block;
+}
+canvas {
+    position: absolute !important;
+    top: 0px !important;
+    left: 0px !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.light{
+    background-color: transparent;
+}
+
