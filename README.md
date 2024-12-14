@@ -12,9 +12,9 @@ It's designed to be non-intrusive, always-on-top, and minimalistic, creating a s
   - DVD Logo 📀
   - Ribbons 🎀
   
-- **GPU Toggle**: Enable or disable hardware acceleration to optimize performance based on your system's capabilities.
+- **GPU Toggle**
 
-- **Tray Integration**: Easy access from your system tray with an intuitive context menu.
+- **Tray Integration**
 
 ### Installation
 
