@@ -48,22 +48,32 @@ async function createWindow() {
     mainWindow.webContents.setFrameRate(await fetchRefreshRate())
 }
 
-// app.commandLine.appendSwitch('enable-gpu-rasterization');
-// app.commandLine.appendSwitch('enable-zero-copy');
-// app.commandLine.appendSwitch('disable-software-rasterizer');
-
-// app.commandLine.appendSwitch('disable-http-cache');
-// app.commandLine.appendSwitch('disable-renderer-backgrounding');
-// app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
-
-// app.commandLine.appendSwitch('use-gl', 'desktop');
-// app.commandLine.appendSwitch('enable-features', 'Vulkan');
-
 loadGpuState();
 if (getGpuState() === 'OFF') {
-    app.disableHardwareAcceleration(); // Ensure GPU is disabled if state is "off"
+    app.disableHardwareAcceleration();
 } else {
     forceGpuOn();
+}
+
+let devToolsWindow;
+function createDevToolsWindow() {
+    devToolsWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        frame: true,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true
+        }
+    });
+
+    devToolsWindow.loadURL('about:blank'); // Just an empty window for DevTools
+
+    mainWindow?.webContents.openDevTools({ mode: 'detach' });
+
+    devToolsWindow.on('closed', () => {
+        devToolsWindow = null;
+    });
 }
 
 app.whenReady().then(async () => {
@@ -80,15 +90,21 @@ app.whenReady().then(async () => {
             {
                 label: 'Sakura',
                 click: () => {
-                    mainWindow?.loadFile(path.resolve(__dirname, '../src/page/sakura.html'));
+                    mainWindow?.loadFile(path.resolve(__dirname, '../src/page/sakura/sakura.html'));
+                },
+            },
+            {
+                label: 'DVD logo',
+                click: () => {
+                    mainWindow?.loadFile(path.resolve(__dirname, '../src/page/dvd/index.html'));
                 },
             },
             { type: 'separator' },
             {
-                label: `GPU: ${getGpuState()}`, // Dynamically display GPU state
+                label: `GPU: ${getGpuState()}`,
                 click: () => {
                     toggleGpu();
-                    updateContextMenu(tray); // Rebuild menu after toggling GPU
+                    updateContextMenu(tray);
                 }
             },
             {
@@ -116,7 +132,6 @@ app.whenReady().then(async () => {
 
     updateContextMenu(tray)
 
-    // tray.setContextMenu(contextMenu);
     tray.setToolTip('Cozy Overlay');
     tray.setTitle('Cozy Overlay');
 
@@ -126,4 +141,6 @@ app.whenReady().then(async () => {
     app.on("activate", function () {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
+
+    createDevToolsWindow();
 });
