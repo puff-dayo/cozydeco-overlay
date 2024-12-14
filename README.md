@@ -6,6 +6,8 @@ It's designed to be non-intrusive, always-on-top, and minimalistic, creating a s
 
 ### Features
 
+<img src="https://github.com/user-attachments/assets/d9c8bec9-e86f-408a-8827-3e27bba0b36e" width="512" height="auto">
+
 - **Ambient Animations**: currently with
   - Snowflakes ❄️
   - Sakura Petals 🌸
